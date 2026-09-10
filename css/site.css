@@ -1,0 +1,351 @@
+/* ==========================================================================
+   frederickson.io
+   Warm-dark splash over a dusk skyline. No frameworks, no web fonts,
+   no third-party requests.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* Surface — warm neutrals, never cold gray */
+  --ink-0: #16110e;   /* deepest; page base behind the photo */
+  --ink-1: #1f1916;   /* raised surface — link pills */
+
+  /* Text */
+  --sand-0: #f7f1ea;  /* primary */
+  --sand-1: #cbbfb4;  /* secondary */
+
+  /* Accent — the amber already living in the photograph's horizon.
+     Used for exactly three things: the rule, link hover/focus, fireflies. */
+  --accent: #f0955a;
+  --accent-soft: rgba(240, 149, 90, 0.14);
+
+  --hairline: rgba(247, 241, 234, 0.16);
+
+  /* Rhythm — 4px scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
+    Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  font-family: var(--sans);
+  color: var(--sand-0);
+  background-color: var(--ink-0);
+
+  /* Scrim first, photograph second — one paint, no extra elements.
+     The stops track the image: dark sky up top, amber horizon at ~70%,
+     near-black rooftops below. Each stop buys contrast where text lands. */
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(18, 13, 11, 0.74) 0%,
+      rgba(18, 13, 11, 0.5) 26%,
+      rgba(18, 13, 11, 0.32) 52%,
+      rgba(18, 13, 11, 0.52) 72%,
+      rgba(18, 13, 11, 0.9) 100%
+    ),
+    url(../images/utrecht.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   Layout
+   -------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  z-index: 2;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  padding: clamp(var(--space-5), 5vw, var(--space-8));
+  text-align: center;
+}
+
+.identity {
+  /* Sits in the upper third, over the darkest part of the sky. */
+  margin-top: clamp(var(--space-6), 13vh, 9rem);
+  max-width: 46rem;
+}
+
+/* --------------------------------------------------------------------------
+   Typography
+   -------------------------------------------------------------------------- */
+
+.eyebrow {
+  margin: 0 0 var(--space-4);
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sand-1);
+  /* Balance half the trailing letter-space so centered text reads centered. */
+  text-indent: 0.15em;
+}
+
+.name {
+  margin: 0;
+  font-size: clamp(2.5rem, 9.5vw, 6.5rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  text-shadow: 0 2px 40px rgba(18, 13, 11, 0.6);
+}
+
+.rule {
+  width: 3.5rem;
+  height: 2px;
+  margin: var(--space-5) auto;
+  border: 0;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.tagline {
+  margin: 0 auto;
+  max-width: 38ch;
+  font-size: clamp(1rem, 2.1vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--sand-1);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   Links
+   -------------------------------------------------------------------------- */
+
+.links {
+  /* Pushed to the bottom in normal flow — collapses gracefully instead of
+     overlapping when the viewport gets short.
+
+     Narrow screens stack the three full-width, the way the old Bootstrap
+     `col-12 col-md-4` did. Three pills will not sit on one phone line, and
+     letting them wrap gives you a lopsided 2 + 1. */
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 19rem;
+  gap: var(--space-3);
+}
+
+@media (min-width: 34rem) {
+  .links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+    max-width: none;
+  }
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  min-height: 2.875rem; /* 46px — comfortable touch target */
+
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--sand-0);
+
+  background: rgba(31, 25, 22, 0.55);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  backdrop-filter: blur(14px) saturate(1.3);
+
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    background-color 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+
+.pill-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--sand-1);
+  transition: color 0.25s var(--ease);
+}
+
+.pill-label {
+  /* Offset the trailing tracking so the label optically centers. */
+  margin-right: -0.14em;
+}
+
+.pill:hover,
+.pill:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background-color: var(--accent-soft);
+  color: var(--sand-0);
+}
+
+.pill:hover .pill-icon,
+.pill:focus-visible .pill-icon {
+  color: var(--accent);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.pill:active {
+  transform: translateY(0);
+}
+
+/* Stacked phone layout — full-width targets, so size them for a thumb. */
+@media (max-width: 33.9375rem) {
+  .links {
+    gap: var(--space-4);
+  }
+
+  .pill {
+    min-height: 3.5rem;
+    padding: var(--space-4) var(--space-5);
+    gap: var(--space-4);
+    font-size: 0.875rem;
+    letter-spacing: 0.16em;
+  }
+
+  .pill-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 1.6;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Fireflies — elements are created by js/fireflies.js
+   -------------------------------------------------------------------------- */
+
+.fireflies {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint;
+}
+
+.firefly {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background: #fff6ec;
+  box-shadow:
+    0 0 6px 1px rgba(255, 214, 170, 0.9),
+    0 0 16px 4px var(--accent),
+    0 0 34px 10px rgba(240, 149, 90, 0.35);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* --------------------------------------------------------------------------
+   Motion preferences
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .pill:hover,
+  .pill:focus-visible {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Short viewports (landscape phones) — tighten the rhythm, keep the layout
+   -------------------------------------------------------------------------- */
+
+@media (max-height: 480px) {
+  .hero {
+    gap: var(--space-5);
+  }
+
+  .identity {
+    margin-top: var(--space-4);
+  }
+
+  .rule {
+    margin-block: var(--space-3);
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  /* No room to stack — a short viewport needs the row back even when narrow. */
+  .links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   404
+   -------------------------------------------------------------------------- */
+
+.notfound-code {
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+  letter-spacing: 0.3em;
+  color: var(--accent);
+}
